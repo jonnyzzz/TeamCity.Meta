@@ -45,8 +45,11 @@
     <orderEntry type="library" name="Idea-OpenApi" level="project" />
     <orderEntry type="library" name="Servlet Api" level="project" />
     <orderEntry type="library" name="spring" level="project" />
-    <orderEntry type="module" module-name="common" />
     <orderEntry type="library" name="TeamCity server runtime" level="project" />
+    <orderEntry type="library" name="commons-logging" level="project" />
+    <orderEntry type="library" name="gson" level="project" />
+    <orderEntry type="library" name="log4j" level="project" />
+    <orderEntry type="library" name="commons-http" level="project" />
   </component>
 </module>
 
