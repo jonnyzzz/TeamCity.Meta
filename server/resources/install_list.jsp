@@ -17,7 +17,6 @@
 <jsp:useBean id="model" type="com.jonnyzzz.teamcity.plugins.meta.web.MetaRunners" scope="request"/>
 
 <div class="jonnyzzzMetaModel">
-
   <table class="parametersTable" cellpadding="0" cellspacing="0">
     <thead>
       <tr>
@@ -28,7 +27,7 @@
     </thead>
     <tbody>
     <c:forEach var="it" items="${model.runners}">
-      <tr>
+      <tr data-runner-id="${it.id}">
         <td>
           <c:out value="${it.id}"/>
         </td>
@@ -39,10 +38,21 @@
           </div>
         </td>
         <td>
-          <a href="#">Install</a>
+          <a href="#" class="install">Install</a>
         </td>
       </tr>
     </c:forEach>
     </tbody>
   </table>
 </div>
+
+<script type="text/javascript">
+  $j(function(){
+    $j("div.jonnyzzzMetaModel").on("click", "a.install", function() {
+      var runnerId = $j(this).parents("tr").data("runner-id");
+      alert("Not implemented for " + runnerId);
+
+      return false;
+    });
+  });
+</script>
