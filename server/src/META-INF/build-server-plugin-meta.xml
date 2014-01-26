@@ -7,4 +7,14 @@
         default-autowire="constructor"
         >
 
+  <bean class="com.jonnyzzz.teamcity.plugins.meta.web.AllPagesHeaderPagePlace" init-method="register"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.meta.web.InstallButtonController"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.meta.web.InstallListController"/>
+
+  <bean class="com.jonnyzzz.teamcity.plugins.meta.web.ThePaths"/>
+
+  <bean class="com.jonnyzzz.teamcity.plugins.meta.web.ModelBuidler"/>
+
+  <bean class="com.jonnyzzz.teamcity.plugins.meta.github.GitHubDownloader"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.meta.github.HttpClientWrapperImpl"/>
 </beans>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Eugene Petrenko
+ * Copyright 2000-2014 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,6 +81,18 @@ fun File.smartDelete() = com.intellij.openapi.util.io.FileUtil.delete(this)
 fun log4j<T>(clazz : Class<T>) : Logger = Logger.getLogger("jetbrains.buildServer.${clazz.getName()}")!!
 fun File.div(child : String) : File = File(this, child)
 
+fun File.listFilesRec() : List<File> {
+  fun listFilesRec(root: File, it : File.() -> Unit) {
+    val files = root.listFiles()?:array<File>()
+    files.filter { it.isFile() } forEach { file -> file.it() }
+    files.filter { it.isDirectory()} forEach { dir -> listFilesRec(dir, it)}
+  }
+
+  val list = arrayListOf<File>()
+  listFilesRec(this) { list.add(this) }
+  return list
+}
+
 tailRecursive
 fun String.trimStart(x : String) : String = if (startsWith(x)) substring(x.length()).trimStart(x) else this
 
@@ -109,4 +121,9 @@ fun <K,V,T:MutableMap<K, V>> T.plus(m:Map<K, V>) : T {
 fun <K, T:Iterable<K>> T.firstOrEmpty() : K? {
   for(k in this) return k
   return null
+}
+
+inline fun having<T>(t:T, ƒ : T.()->Unit) : T {
+  t.ƒ()
+  return t
 }

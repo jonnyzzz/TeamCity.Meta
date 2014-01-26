@@ -1,5 +1,5 @@
 <component name="CopyrightManager">
-  <settings default="JetBrains open-surced">
+  <settings default="apache2">
     <module2copyright />
     <LanguageOptions name="JSPX">
       <option name="fileTypeOverride" value="1" />
