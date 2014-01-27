@@ -33,7 +33,7 @@
     $j(function(){
       <c:url var="metaListUrl" value="${metaListPath}"/>
       var ajaxUrl = "<bs:forJs>${metaListUrl}</bs:forJs>";
-      BS.ajaxUpdater($("jonnyzzzMetaInstallerContainer"), ajaxUrl, {method:"get", evalScripts : true});
+      BS.ajaxUpdater($("jonnyzzzMetaInstallerContainer"), ajaxUrl, {method : "GET", evalScripts : true});
     });
   </script>
 </div>

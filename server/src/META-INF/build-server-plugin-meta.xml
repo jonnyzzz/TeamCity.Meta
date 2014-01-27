@@ -10,6 +10,7 @@
   <bean class="com.jonnyzzz.teamcity.plugins.meta.web.AllPagesHeaderPagePlace" init-method="register"/>
   <bean class="com.jonnyzzz.teamcity.plugins.meta.web.InstallButtonController"/>
   <bean class="com.jonnyzzz.teamcity.plugins.meta.web.InstallListController"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.meta.web.InstallController"/>
 
   <bean class="com.jonnyzzz.teamcity.plugins.meta.web.ThePaths"/>
 

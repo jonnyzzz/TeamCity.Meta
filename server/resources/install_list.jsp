@@ -15,7 +15,10 @@
   --%>
 <%@include file="/include-internal.jsp"%>
 <jsp:useBean id="model" type="com.jonnyzzz.teamcity.plugins.meta.web.MetaRunners" scope="request"/>
+<jsp:useBean id="projectId" type="java.lang.String" scope="request"/>
+<jsp:useBean id="installPath" type="java.lang.String" scope="request"/>
 
+<c:url var="installUrl" value="${installPath}"/>
 <div class="jonnyzzzMetaModel">
   <table class="parametersTable" cellpadding="0" cellspacing="0">
     <thead>
@@ -51,6 +54,17 @@
     $j("div.jonnyzzzMetaModel").on("click", "a.install", function() {
       var runnerId = $j(this).parents("tr").data("runner-id");
       alert("Not implemented for " + runnerId);
+
+      $(this).replace("<div>Installing</div>");
+
+      var ajaxUrl = "<bs:forJs>${installUrl}</bs:forJs>";
+      BS.ajaxRequest(ajaxUrl, {
+        method: "POST",
+        parameters : {
+          projectId : "<bs:forJs>${projectId}</bs:forJs>",
+          meta : runnerId
+        }
+      });
 
       return false;
     });

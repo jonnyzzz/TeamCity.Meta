@@ -22,6 +22,6 @@
 
     <c:url var="ajaxUrl" value="${jonnyzzzMetaInstallButtonController}" />
     var ajaxUrl = "<bs:forJs>${ajaxUrl}</bs:forJs>";
-    BS.ajaxUpdater($("jonnyzzzMetaInstaller"), ajaxUrl, {method:"get", evalScripts : true})
+    BS.ajaxUpdater($("jonnyzzzMetaInstaller"), ajaxUrl, {method : "GET", evalScripts : true})
   });
 </script>
