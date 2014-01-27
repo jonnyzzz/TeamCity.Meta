@@ -31,6 +31,12 @@ import org.springframework.security.core.authority.AuthorityUtils
 import jetbrains.buildServer.util.FileUtil
 import jetbrains.buildServer.serverSide.ProjectManager
 import com.jonnyzzz.teamcity.plugins.meta.div
+import jetbrains.buildServer.controllers.AuthorizationInterceptor
+import jetbrains.buildServer.serverSide.auth.SecurityContext
+import jetbrains.buildServer.serverSide.auth.AuthUtil
+import jetbrains.buildServer.serverSide.impl.auth.ServerAuthUtil
+import jetbrains.buildServer.serverSide.auth.Permissions
+import jetbrains.buildServer.serverSide.auth.Permission
 
 public class ThePaths(val plugin : PluginDescriptor) {
   public val install_button_html : String
@@ -49,10 +55,29 @@ public class ThePaths(val plugin : PluginDescriptor) {
      get() = plugin.getPluginResourcesPath("install.html")
 }
 
+public class Auth(val auth : SecurityContext) {
+  public fun isAllowed(projectId : String) : Boolean {
+    try {
+      assertAllowed(projectId)
+      return true
+    } catch (t:Throwable) {
+      return false
+    }
+  }
+
+  public fun assertAllowed(projectId : String) {
+    ServerAuthUtil.checkHasPermissionForProject(
+            auth.getAuthorityHolder(),
+            projectId,
+            Permission.EDIT_PROJECT)
+  }
+}
+
 public class AllPagesHeaderPagePlace(
         pagePlaces : PagePlaces,
         plugin : PluginDescriptor,
-        val paths : ThePaths
+        val paths : ThePaths,
+        val auth : Auth
 ) : SimplePageExtension(
         pagePlaces,
         PlaceId.ALL_PAGES_HEADER,
@@ -61,10 +86,13 @@ public class AllPagesHeaderPagePlace(
 
   override fun isAvailable(request: HttpServletRequest): Boolean {
     val path = WebUtil.getOriginalPathWithoutContext(request)
+
     return path?.startsWith("/admin/editProject.html")?: false
            && request.getParameter("tab") == "metaRunner"
+           && with(request.getParameter("projectId")) {
+              this != null && auth.isAllowed(this)
+           }
   }
-
 
   override fun fillModel(model: Map<String, Any>, request: HttpServletRequest) {
     super<SimplePageExtension>.fillModel(model, request)
@@ -76,38 +104,47 @@ public class AllPagesHeaderPagePlace(
 
 public class InstallButtonController(web : WebControllerManager,
                                      plugin : PluginDescriptor,
-                                     val paths : ThePaths) : BaseController() {
+                                     val paths : ThePaths,
+                                     val auth: Auth) : BaseController() {
   {
     web.registerController(paths.install_button_html, this)
   }
 
-  override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? =
-    having(ModelAndView(paths.install_button_res)) {
-      getModel()?.put("metaListPath", paths.install_lits_html + "?projectId=" + request.getParameter("projectId"))
+  override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
+    val projectId = request.getParameter("projectId")!!
+    auth.assertAllowed(projectId)
+    return having(ModelAndView(paths.install_button_res)) {
+      getModel()?.put("metaListPath", paths.install_lits_html + "?projectId=" + projectId)
+    }
   }
 }
 
 public class InstallListController(web: WebControllerManager,
                                    plugin: PluginDescriptor,
                                    val paths : ThePaths,
+                                   val auth : Auth,
                                    val model : ModelBuidler) : BaseController() {
   {
     web.registerController(paths.install_lits_html, this)
   }
 
-  override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? =
-    having(ModelAndView(paths.install_list_res)) {
+  override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
+    val projectId = request.getParameter("projectId")!!
+    auth.assertAllowed(projectId)
+    return having(ModelAndView(paths.install_list_res)) {
       with(getModel()!!) {
         put("model", model.model)
         put("projectId", request.getParameter("projectId")!!)
         put("installPath", paths.install_action)
       }
+    }
   }
 }
 
 public class InstallController(web : WebControllerManager,
                                plugin : PluginDescriptor,
                                val projects : ProjectManager,
+                               val auth : Auth,
                                val paths : ThePaths,
                                val model : ModelBuidler) : BaseController() {
   {
@@ -120,11 +157,12 @@ public class InstallController(web : WebControllerManager,
       response.setStatus(404)
     }
 
-    val model = model.model
-    val id = request.getParameter("meta")!!
     val projectId = request.getParameter("projectId")!!
+    auth.assertAllowed(projectId)
+
     val project = projects.findProjectByExternalId(projectId)!!
-    val it = model.runners.find { it.id == id }!!
+    val id = request.getParameter("meta")!!
+    val it = model.model.runners.find { it.id == id }!!
 
     val dest = project.getPluginDataDirectory("metaRunners") / (projectId + "_" + it.id + ".xml")
     dest.getParentFile()?.mkdirs()
