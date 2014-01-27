@@ -54,7 +54,7 @@
     $j("div.jonnyzzzMetaModel").on("click", "a.install", function() {
       var runnerId = $j(this).parents("tr").data("runner-id");
 
-      $(this).replace("<div>Installing</div>");
+      $j(this).replaceWith($j("<div>" + BS.loadingIcon + "Installing</div>", {style: "width:2em"}));
 
       var ajaxUrl = "<bs:forJs>${installUrl}</bs:forJs>";
       BS.ajaxRequest(ajaxUrl, {
@@ -62,6 +62,9 @@
         parameters : {
           projectId : "<bs:forJs>${projectId}</bs:forJs>",
           meta : runnerId
+        },
+        onComplete : function() {
+          BS.reload();
         }
       });
 
