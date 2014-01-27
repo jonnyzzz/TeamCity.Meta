@@ -53,7 +53,6 @@
   $j(function(){
     $j("div.jonnyzzzMetaModel").on("click", "a.install", function() {
       var runnerId = $j(this).parents("tr").data("runner-id");
-      alert("Not implemented for " + runnerId);
 
       $(this).replace("<div>Installing</div>");
 
