@@ -72,14 +72,18 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
     val cm = PoolingClientConnectionManager(schemaRegistry)
     val httpclient = DefaultHttpClient(cm, ps);
 
-    httpclient.setRoutePlanner(ProxySelectorRoutePlanner(
-            httpclient.getConnectionManager()!!.getSchemeRegistry(),
-            ProxySelector.getDefault()));
+    with(httpclient) {
+      setRoutePlanner(
+              ProxySelectorRoutePlanner(
+                getConnectionManager()!!.getSchemeRegistry(),
+                ProxySelector.getDefault()));
 
 
-    httpclient.addRequestInterceptor(RequestAcceptEncoding());
-    httpclient.addResponseInterceptor(ResponseContentEncoding());
-    httpclient.setHttpRequestRetryHandler(DefaultHttpRequestRetryHandler(3, true));
+      addRequestInterceptor(RequestAcceptEncoding());
+      addResponseInterceptor(ResponseContentEncoding());
+      setHttpRequestRetryHandler(DefaultHttpRequestRetryHandler(3, true));
+    }
+
 
     myClient = httpclient;
   }
