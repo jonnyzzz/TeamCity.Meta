@@ -162,7 +162,7 @@ public class InstallController(web : WebControllerManager,
 
     val project = projects.findProjectByExternalId(projectId)!!
     val id = request.getParameter("meta")!!
-    val it = model.model.runners.find { it.id == id }!!
+    val it = model.model.runners.first { it.id == id }
 
     val dest = project.getPluginDataDirectory("metaRunners") / (projectId + "_" + it.id + ".xml")
     dest.getParentFile()?.mkdirs()
