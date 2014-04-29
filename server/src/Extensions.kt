@@ -118,11 +118,6 @@ fun <K,V,T:MutableMap<K, V>> T.plus(m:Map<K, V>) : T {
   return this
 }
 
-fun <K, T:Iterable<K>> T.firstOrEmpty() : K? {
-  for(k in this) return k
-  return null
-}
-
 inline fun having<T>(t:T, ƒ : T.()->Unit) : T {
   t.ƒ()
   return t
