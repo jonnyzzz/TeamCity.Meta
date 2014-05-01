@@ -37,6 +37,9 @@ import jetbrains.buildServer.serverSide.auth.AuthUtil
 import jetbrains.buildServer.serverSide.impl.auth.ServerAuthUtil
 import jetbrains.buildServer.serverSide.auth.Permissions
 import jetbrains.buildServer.serverSide.auth.Permission
+import jetbrains.buildServer.serverSide.RunTypeRegistry
+import jetbrains.buildServer.util.WaitFor
+import jetbrains.buildServer.serverSide.RunTypePerProjectRegistry
 
 public class ThePaths(val plugin : PluginDescriptor) {
   public val install_button_html : String
@@ -143,6 +146,7 @@ public class InstallListController(web: WebControllerManager,
 
 public class InstallController(web : WebControllerManager,
                                plugin : PluginDescriptor,
+                               val runners : RunTypePerProjectRegistry,
                                val projects : ProjectManager,
                                val auth : Auth,
                                val paths : ThePaths,
@@ -164,9 +168,17 @@ public class InstallController(web : WebControllerManager,
     val id = request.getParameter("meta")!!
     val it = model.model.runners.first { it.id == id }
 
-    val dest = project.getPluginDataDirectory("metaRunners") / (projectId + "_" + it.id + ".xml")
+    val metaRunnerId = projectId + "_" + it.id
+    val dest = project.getPluginDataDirectory("metaRunners") / (metaRunnerId + ".xml")
     dest.getParentFile()?.mkdirs()
     FileUtil.copy(it.xml, dest)
+
+    fun now() = System.currentTimeMillis();
+    val start = now();
+
+    while(runners.getProjectRegistry(project).findExtendedRunType(metaRunnerId) == null || (now() - start) < 30000) {
+      Thread.sleep(300)
+    }
 
     return having(null) {
       having(response) {
