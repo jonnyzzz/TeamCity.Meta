@@ -5,11 +5,11 @@
     <option name="COMMON_VM_ARGUMENTS" value="-ea -Xmx384m -XX:MaxPermSize=200m -Ddebug=true -server -XX:+HeapDumpOnOutOfMemoryError -Djava.awt.headless -DTC.res.disableAll=true -Dteamcity.development.mode=true -Dteamcity.development.shadowCopyClasses=true -Dteamcity.data.path=%IDEA_RUN:TOMCAT_HOME%/../Meta.Data -Dteamcity_logs=%IDEA_RUN:TOMCAT_HOME%/logs -Dlog4j.configuration=file:%IDEA_RUN:TOMCAT_HOME%/conf/teamcity-server-log4j.xml" />
     <option name="UPDATING_POLICY" value="restart-server" />
     <deployment>
-      <file path="%IDEA_RUN:TOMCAT_HOME%/webapps/ROOT">
+      <artifact name="idea-resolve-helper">
         <settings>
           <option name="CONTEXT_PATH" value="/bs" />
         </settings>
-      </file>
+      </artifact>
     </deployment>
     <server-settings>
       <option name="BASE_DIRECTORY_NAME" value="Unnamed__NETPackagesSupport_2" />
@@ -89,6 +89,7 @@
     <method>
       <option name="BuildArtifacts" enabled="true">
         <artifact name="deploy" />
+        <artifact name="idea-resolve-helper" />
       </option>
     </method>
   </configuration>
