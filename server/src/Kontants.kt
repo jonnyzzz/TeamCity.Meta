@@ -16,7 +16,11 @@
 
 package com.jonnyzzz.teamcity.plugins.meta
 
+import kotlin.properties.Delegates
+import jetbrains.buildServer.serverSide.TeamCityProperties
+
 public object Kontants {
-  public val GITHUB_URL : String = "https://github.com/JetBrains/meta-runner-power-pack"
-  public val GITHUB_DOWNLOAD_URL : String = "https://github.com/JetBrains/meta-runner-power-pack/archive/master.zip"
+  public val GITHUB_DOWNLOAD_URL: String by Delegates.lazy {
+    TeamCityProperties.getProperty("jonnyzzz.teamcity.meta.download.url", "https://github.com/JetBrains/meta-runner-power-pack/archive/master.zip")
+  }
 }
