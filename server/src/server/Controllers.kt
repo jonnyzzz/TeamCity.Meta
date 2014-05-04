@@ -41,6 +41,7 @@ import jetbrains.buildServer.serverSide.RunTypeRegistry
 import jetbrains.buildServer.util.WaitFor
 import jetbrains.buildServer.serverSide.RunTypePerProjectRegistry
 import java.io.File
+import jetbrains.buildServer.serverSide.SProject
 
 public class ThePaths(val plugin : PluginDescriptor) {
   public val install_button_html : String
@@ -139,6 +140,19 @@ public class InstallController(web : WebControllerManager,
     web.registerController(paths.install_action, this)
   }
 
+  private data class MetaRunnerAndPath(val id: String, val file : File)
+
+  private fun resolvePath(project : SProject, it : MetaRunnerInfo) : MetaRunnerAndPath {
+    var counter : Int? = null
+    while(true){
+      val name = project.getExternalId() + "_" + it.id  + if (counter == null) "" else "_$counter"
+      val path = project.getPluginDataDirectory("metaRunners") / (name + ".xml")
+      if (!path.exists()) {
+        return InstallController.MetaRunnerAndPath(name, path)
+      }
+      counter = (counter ?: 0) + 1
+    }
+  }
 
   override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
     if (!"POST".equalsIgnoreCase(request.getMethod()!!)) return having(null) {
@@ -152,15 +166,14 @@ public class InstallController(web : WebControllerManager,
     val id = request.getParameter("meta")!!
     val it = model.model.runners.first { it.id == id }
 
-    val metaRunnerId = projectId + "_" + it.id
-    val dest = project.getPluginDataDirectory("metaRunners") / (metaRunnerId + ".xml")
-    dest.getParentFile()?.mkdirs()
-    FileUtil.copy(it.xml, dest)
+    val metaRunner = resolvePath(project, it)
+    metaRunner.file.getParentFile()?.mkdirs()
+    FileUtil.copy(it.xml, metaRunner.file)
 
     fun now() = System.currentTimeMillis();
     val start = now();
 
-    while(runners.getProjectRegistry(project).findExtendedRunType(metaRunnerId) == null || (now() - start) < 30000) {
+    while(runners.getProjectRegistry(project).findExtendedRunType(metaRunner.id) == null || (now() - start) < 30000) {
       Thread.sleep(300)
     }
 
