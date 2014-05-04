@@ -40,6 +40,7 @@ import jetbrains.buildServer.serverSide.auth.Permission
 import jetbrains.buildServer.serverSide.RunTypeRegistry
 import jetbrains.buildServer.util.WaitFor
 import jetbrains.buildServer.serverSide.RunTypePerProjectRegistry
+import java.io.File
 
 public class ThePaths(val plugin : PluginDescriptor) {
   public val install_button_html : String
@@ -58,23 +59,6 @@ public class ThePaths(val plugin : PluginDescriptor) {
      get() = plugin.getPluginResourcesPath("install.html")
 }
 
-public class Auth(val auth : SecurityContext) {
-  public fun isAllowed(projectId : String) : Boolean {
-    try {
-      assertAllowed(projectId)
-      return true
-    } catch (t:Throwable) {
-      return false
-    }
-  }
-
-  public fun assertAllowed(projectId : String) {
-    ServerAuthUtil.checkHasPermissionForProject(
-            auth.getAuthorityHolder(),
-            projectId,
-            Permission.EDIT_PROJECT)
-  }
-}
 
 public class AllPagesHeaderPagePlace(
         pagePlaces : PagePlaces,
