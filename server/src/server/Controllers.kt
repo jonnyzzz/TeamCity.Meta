@@ -76,7 +76,7 @@ public class AllPagesHeaderPagePlace(
     val path = WebUtil.getOriginalPathWithoutContext(request)
 
     return path?.startsWith("/admin/editProject.html")?: false
-           && request.getParameter("tab") == "metaRunner"
+           && (request.getParameter("tab") == "metaRunner" || request.getParameter("item") == "metaRunner")
            && with(request.getParameter("projectId")) {
               this != null && auth.isAllowed(this)
            }
