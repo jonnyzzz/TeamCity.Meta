@@ -22,6 +22,7 @@ import jetbrains.buildServer.util.FileUtil
 import org.jdom.xpath.XPath
 import org.jdom.Attribute
 import org.jdom.Text
+import kotlin.platform.platformStatic
 
 data public class MetaRunnerInfo(val xml: File,
                                  val id: String,
@@ -30,6 +31,7 @@ data public class MetaRunnerInfo(val xml: File,
                                  val subRunners: List<String>)
 
 public object MetaParser {
+  [platformStatic]
   public fun parseRunnerSpec(xml : File) : MetaRunnerInfo? {
     try {
       val root = FileUtil.parseDocument(xml, false)!!

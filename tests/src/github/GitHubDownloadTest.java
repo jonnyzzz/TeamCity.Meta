@@ -17,7 +17,6 @@ package github;/*
 import com.jonnyzzz.teamcity.plugins.meta.github.GitHubDownloader;
 import com.jonnyzzz.teamcity.plugins.meta.github.HttpClientWrapperImpl;
 import jetbrains.buildServer.BaseTestCase;
-import jetbrains.buildServer.RunBuildException;
 import junit.framework.Assert;
 import org.testng.annotations.Test;
 

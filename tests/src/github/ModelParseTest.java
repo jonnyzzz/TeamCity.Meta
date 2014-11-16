@@ -29,7 +29,7 @@ public class ModelParseTest extends BaseTestCase {
 
   @Test
   public void test_parses_meta_xml() throws IOException {
-    final MetaRunnerInfo info = MetaParser.instance$.parseRunnerSpec(createTempFile(SAMPLE));
+    final MetaRunnerInfo info = MetaParser.parseRunnerSpec(createTempFile(SAMPLE));
     Assert.assertNotNull(info);
 
     Assert.assertEquals(info.getName(), "Gerrit Verification");
