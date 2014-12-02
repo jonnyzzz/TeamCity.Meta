@@ -61,9 +61,15 @@ public class GitHubDownloader(val http:HttpClientWrapper) {
           if (ze == null) break
           if (ze.isDirectory()) continue
 
-          val name =
-                  listOf(*ze.getName().replace("\\", "/").trimStart("/").trimStart(".").split('/'))
-                  .stream().drop(1).makeString("/")
+          val name = ze.getName()
+                  .replace("\\", "/")
+                  .trimStart("/")
+                  .trimStart(".")
+                  .split('/')
+                  .stream()
+                  .drop(1)
+                  .joinToString("/")
+
           if (name == "") continue
 
           LOG.debug("content: ${name}")
