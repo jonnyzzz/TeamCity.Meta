@@ -23,17 +23,47 @@
   <c:set var="repo" value="https://github.com/JetBrains/meta-runner-power-pack"/>
   <div class="grayNote">
     Select Meta-Runner to install from <a href="${repo}" target="_blank">${repo}</a>
+    <a href="#" class="btn jonnyzzzMetaInstallerReset">Reload</a>
   </div>
 
   <div id="jonnyzzzMetaInstallerContainer">
-    <div style="width: 5em"><forms:progressRing /></div>
+  </div>
+
+  <div id="jonnyzzzMetaInstallerContainerProgress">
+    <div style='width: 15em'>
+      <forms:progressRing style="float:none"/>
+      <span>Fetching meta-runners from the repo...</span>
+    </div>
   </div>
 
   <script type="text/javascript">
     $j(function(){
-      <c:url var="metaListUrl" value="${metaListPath}"/>
-      var ajaxUrl = "<bs:forJs>${metaListUrl}</bs:forJs>";
-      BS.ajaxUpdater($("jonnyzzzMetaInstallerContainer"), ajaxUrl, {method : "GET", evalScripts : true});
+      var loadContainer = function(reset) {
+
+        $j("#jonnyzzzMetaInstallerContainerProgress").show();
+        $j("#jonnyzzzMetaInstallerContainer").hide();
+
+        <c:url var="metaListUrl" value="${metaListPath}"/>
+        var ajaxUrl = "<bs:forJs>${metaListUrl}</bs:forJs>";
+        if (reset) {
+          ajaxUrl += "&reset=1";
+        }
+        BS.ajaxUpdater($("jonnyzzzMetaInstallerContainer"), ajaxUrl, {
+          method: "GET",
+          evalScripts: true,
+          onComplete: function () {
+            $j("#jonnyzzzMetaInstallerContainerProgress").hide();
+            $j("#jonnyzzzMetaInstallerContainer").show();
+          }
+        });
+      };
+
+      $j("a.jonnyzzzMetaInstallerReset").click(function() {
+        loadContainer("reset");
+        return false;
+      });
+
+      loadContainer();
     });
   </script>
 </div>
