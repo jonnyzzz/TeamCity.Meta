@@ -25,7 +25,7 @@
       <tr>
         <th>Runner ID</th>
         <th>Name</th>
-        <th></th>
+        <th style="width: 5em"></th>
       </tr>
     </thead>
     <tbody>
