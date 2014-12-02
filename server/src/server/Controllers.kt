@@ -119,6 +119,7 @@ public class InstallListController(web: WebControllerManager,
   override fun doHandle(request: HttpServletRequest, response: HttpServletResponse): ModelAndView? {
     val projectId = request.getParameter("projectId")!!
     auth.assertAllowed(projectId)
+    if (request.getParameter("reset") != null) model.reset();
     return having(ModelAndView(paths.install_list_res)) {
       with(getModel()!!) {
         put("model", model.model)
