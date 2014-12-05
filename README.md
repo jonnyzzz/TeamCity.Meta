@@ -5,7 +5,7 @@ This project provide easy-to-use access to TeamCity
 public meta-runners [repository](https://github.com/JetBrains/meta-runner-power-pack)
 
 You can now install meta runners with two clicks from 
-Administration | <Project> | Meta Runners page
+Administration | \<Project\> | Meta Runners page
 
 License
 -------
