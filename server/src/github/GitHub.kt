@@ -53,6 +53,7 @@ public class GitHubDownloader(val http:HttpClientWrapper) {
       catchIO(ZipInputStream(entity.getContent()!!), {error(url, "Failed to extract", it)}) { zip ->
         FileUtil.createEmptyDir(dest)
 
+        var hasFiles = false
         while(true) {
           val ze = zip.getNextEntry()
           if (ze == null) break
@@ -77,7 +78,9 @@ public class GitHubDownloader(val http:HttpClientWrapper) {
           catchIO(BufferedOutputStream(FileOutputStream(file)), {error(url, "Failed to create ${file}", it)}) {
             zip.copyTo(it)
           }
+          hasFiles = true
         }
+        if (!hasFiles) error(url, "Downloaded package contains no files")
       }
     }
   }

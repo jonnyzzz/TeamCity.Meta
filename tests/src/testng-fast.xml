@@ -2,6 +2,8 @@
 <suite name="TeamCity.Node tests">
   <test name="fast">
     <classes>
+      <class name="github.ModelParseTest"/>
+      <class name="github.GitHubDownloadTest"/>
     </classes>
   </test>
 </suite>
