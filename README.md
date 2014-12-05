@@ -13,7 +13,7 @@ License
 This plugin is provided under Apache 2.0 license
 
 
-Node
+Note
 ----
 
 We use Kotlin as main language for the plugin
