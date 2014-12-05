@@ -24,13 +24,14 @@
   <div class="grayNote">
     Select Meta-Runner to install from <a href="${repo}" target="_blank">${repo}</a>
     <a href="#" class="btn jonnyzzzMetaInstallerReset">Reload</a>
+    <div id="jonnyzzzMetaInstallerContainer-Times" class="smallNote" style="display: inline-block; margin-left: 2em;">downloaded <div class="jonnyzzzMetaInstallerContainer-downloadedSince" style="display: inline-block"></div></div>
   </div>
 
   <div id="jonnyzzzMetaInstallerContainer">
   </div>
 
   <div id="jonnyzzzMetaInstallerContainerProgress">
-    <div style='width: 15em'>
+    <div style='width: 30em'>
       <forms:progressRing style="float:none"/>
       <span>Fetching meta-runners from the repo...</span>
     </div>
@@ -39,7 +40,8 @@
   <script type="text/javascript">
     $j(function(){
       var loadContainer = function(reset) {
-
+        $j("#jonnyzzzMetaInstallerContainer-Times").hide();
+        $j(".jonnyzzzMetaInstallerContainer-downloadedSince").html("");
         $j("#jonnyzzzMetaInstallerContainerProgress").show();
         $j("#jonnyzzzMetaInstallerContainer").hide();
 
@@ -54,6 +56,7 @@
           onComplete: function () {
             $j("#jonnyzzzMetaInstallerContainerProgress").hide();
             $j("#jonnyzzzMetaInstallerContainer").show();
+            $j("#jonnyzzzMetaInstallerContainer-Times").show();
           }
         });
       };

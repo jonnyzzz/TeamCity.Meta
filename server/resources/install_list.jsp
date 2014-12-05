@@ -47,10 +47,17 @@
     </c:forEach>
     </tbody>
   </table>
+
+  <div class="jonnyzzzMetaInstallerContainer-downloadedSince-temp">
+    <bs:elapsedTime time="${model.downloadedDate}"/>
+  </div>
 </div>
 
 <script type="text/javascript">
   $j(function(){
+    $j(".jonnyzzzMetaInstallerContainer-downloadedSince").html("");
+    $j(".jonnyzzzMetaInstallerContainer-downloadedSince-temp").appendTo(".jonnyzzzMetaInstallerContainer-downloadedSince");
+
     $j("div.jonnyzzzMetaModel").on("click", "a.install", function() {
       var runnerId = $j(this).parents("tr").data("runner-id");
 

@@ -29,17 +29,25 @@ import org.jdom.xpath.XPath
 import kotlin.properties.Delegates
 import org.jdom.Attribute
 import org.jdom.Text
+import java.util.Date
+import com.jonnyzzz.teamcity.plugins.meta.log4j
 
-data public class MetaRunners(val runners: List<MetaRunnerInfo>)
+data public class MetaRunners(val downloadedDate : Date, val runners: List<MetaRunnerInfo>)
 
 public class ModelBuidler(val github : GitHubDownloader,
                           val plugin : PluginDescriptor,
                           val paths : ServerPaths) {
+  private val LOG = log4j(javaClass<GitHubDownloader>())
 
   private val Path : File by Delegates.lazy { paths.getCacheDirectory(plugin.getPluginName()) / "meta" }
+  private val Timestamp : File by Delegates.lazy { Path / ".timestamp" }
 
   public val model : MetaRunners
-    get() = MetaRunners(listMetaRunners(getFetchedPath()))
+    get() {
+      val runners = listMetaRunners(getFetchedPath())
+      val timestamp = readTimestamp()
+      return MetaRunners(timestamp, runners)
+    }
 
   public fun reset() {
     FileUtil.delete(Path)
@@ -48,9 +56,28 @@ public class ModelBuidler(val github : GitHubDownloader,
   private fun getFetchedPath() : File {
     if (Path.isDirectory() && Path.listFiles()?.size?:0 > 0) return Path
 
+    val time = Date().getTime()
+
     FileUtil.createDir(Path)
     github.download(Path, Kontants.GITHUB_DOWNLOAD_URL)
+
+    Timestamp.getParentFile().mkdirs()
+    Timestamp.writeText(time.toString())
+
     return Path
+  }
+
+  private fun readTimestamp() : Date {
+    if (!Timestamp.isFile()) return Date(0)
+
+    try {
+      return Date(Timestamp.readText().toLong())
+    } catch(t : Throwable) {
+      LOG.debug("Failed to read timestamp. " + t.getMessage(), t)
+      FileUtil.delete(Timestamp)
+    }
+
+    return Date(0)
   }
 
   private fun listMetaRunners(path:File) : List<MetaRunnerInfo> =
