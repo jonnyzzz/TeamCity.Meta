@@ -145,13 +145,20 @@ public class InstallController(web : WebControllerManager,
 
   private fun resolvePath(project : SProject, it : MetaRunnerInfo) : MetaRunnerAndPath {
     var counter : Int? = null
+    fun metaRunnerId(): String {
+      var name = project.getExternalId() + "_" + it.id + if (counter == null) "" else "_$counter"
+      if (name.startsWith("_")) name = "p" + name
+      if (name.length >= 79) name = name.substring(0, 79)
+      return name
+    }
+
     while(true){
-      val name = project.getExternalId() + "_" + it.id  + if (counter == null) "" else "_$counter"
+      val name = metaRunnerId()
       val path = project.getPluginDataDirectory("metaRunners") / (name + ".xml")
       if (!path.exists()) {
         return InstallController.MetaRunnerAndPath(name, path)
       }
-      counter = (counter ?: 0) + 1
+      counter = (counter ?: 1) + 1
     }
   }
 
