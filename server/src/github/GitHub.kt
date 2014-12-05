@@ -50,9 +50,6 @@ public class GitHubDownloader(val http:HttpClientWrapper) {
       val entity = getEntity()
 
       if (entity == null) throw error(url, "No data was returned")
-      val contentType = entity.getContentType()?.getValue()
-      if ("application/zip" != contentType) throw error(url, "Invalid content-type: ${contentType}")
-
       catchIO(ZipInputStream(entity.getContent()!!), {error(url, "Failed to extract", it)}) { zip ->
         FileUtil.createEmptyDir(dest)
 
