@@ -21,10 +21,14 @@
   <h2 class="noBorder">Install Meta-Runners</h2>
 
   <c:set var="repo" value="https://github.com/JetBrains/meta-runner-power-pack"/>
-  <div class="grayNote">
+  <div class="" style="height: 2em">
+    <div id="jonnyzzzMetaInstallerContainer-Times" class="smallNote" style="display: inline-block; margin-right: 1em; float: right;">
+      downloaded <div class="jonnyzzzMetaInstallerContainer-downloadedSince" style="display: inline-block; margin-right: 1em"></div>
+      <a href="#" class="btn jonnyzzzMetaInstallerReset">Reload</a>
+    </div>
+    <span>
     Select Meta-Runner to install from <a href="${repo}" target="_blank">${repo}</a>
-    <a href="#" class="btn jonnyzzzMetaInstallerReset">Reload</a>
-    <div id="jonnyzzzMetaInstallerContainer-Times" class="smallNote" style="display: inline-block; margin-left: 2em;">downloaded <div class="jonnyzzzMetaInstallerContainer-downloadedSince" style="display: inline-block"></div></div>
+    </span>
   </div>
 
   <div id="jonnyzzzMetaInstallerContainer">
