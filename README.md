@@ -1,7 +1,7 @@
 TeamCity.Meta
 =============
 
-This project provide easy-to-use access to TeamCity 
+This project provides easy-to-use access to TeamCity 
 public meta-runners [repository](https://github.com/JetBrains/meta-runner-power-pack)
 
 You can now install meta runners with one click from 
