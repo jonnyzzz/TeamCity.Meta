@@ -7,7 +7,7 @@ public meta-runners [repository](https://github.com/JetBrains/meta-runner-power-
 You can now install meta runners with one click from 
 Administration | \<Project\> | Meta Runners page
 
-The project uses [Kotlin](http://www.kotlilang.org)
+The project uses [Kotlin](http://www.kotlinlang.org)
 
 License
 -------
